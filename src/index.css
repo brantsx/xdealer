@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  background: #f4f7fb;
+  color: #0b1728;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.app-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15, 23, 42, 0.22) transparent;
+}
+
+.app-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.app-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.2);
+  border-radius: 999px;
+}
+
+.table-grid {
+  min-width: 1120px;
+}
