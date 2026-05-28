@@ -83,7 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const authUser = { id: data.user.id, email: data.user.email ?? email };
       const workspace = await fetchAuthWorkspace(authUser.id);
       if (!workspace) {
-        throw new Error("No Xdealer workspace is linked to this Supabase user.");
+        throw new Error("No xDealer workspace is linked to this Supabase user.");
       }
       setUser(authUser);
       setProfile(workspace.profile);
@@ -118,7 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           authUserId: authUser.id,
           email: authUser.email,
           fullName,
-          organisationName: organisationName?.trim() || `${fullName.split(" ")[0] || "Xdealer"} Workspace`,
+          organisationName: organisationName?.trim() || `${fullName.split(" ")[0] || "xDealer"} Workspace`,
         }));
       setUser(authUser);
       setProfile(workspace.profile);

@@ -17,7 +17,7 @@ const now = "2026-05-27T10:00:00.000Z";
 
 export const demoOrganisation: Organisation = {
   id: DEMO_ORG_ID,
-  name: "Xdealer Demo Group",
+  name: "xDealer Demo Group",
   tradingName: "Northgate Vehicle Trading",
   createdAt: "2026-01-05T09:00:00.000Z",
   updatedAt: now,

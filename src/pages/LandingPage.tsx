@@ -2,6 +2,7 @@ import { ArrowRight, BarChart3, CheckCircle2, FileText, ShieldCheck, TrendingUp 
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { Card, CardBody } from "../components/ui/Card";
+import { Logo } from "../components/ui/Logo";
 import { MetricCard } from "../components/ui/MetricCard";
 
 const useCases = [
@@ -16,10 +17,7 @@ export function LandingPage() {
     <div className="min-h-screen bg-white text-slate-950">
       <header className="absolute inset-x-0 top-0 z-20">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
-          <Link to="/" className="flex items-center gap-3 text-white">
-            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-signal-500 text-sm font-black">X</span>
-            <span className="text-lg font-semibold">Xdealer</span>
-          </Link>
+          <Logo to="/" tone="light" size="sm" />
           <div className="flex items-center gap-2">
             <Link to="/login" className="hidden rounded-md px-4 py-2 text-sm font-semibold text-white/85 hover:bg-white/10 sm:block">
               Log in
@@ -38,7 +36,7 @@ export function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/88 to-ink-950/35" />
         <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-4 pb-20 pt-28 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-300">Xdealer</p>
+            <p className="text-sm font-semibold tracking-[0.18em] text-emerald-300">xDealer</p>
             <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
               The AI trading agent for UK used vehicle decisions.
             </h1>
@@ -63,7 +61,7 @@ export function LandingPage() {
         <section className="bg-slate-50 py-16">
           <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
             <MetricCard label="Problem" value="Fragmented decisions" helper="Offers, prep calls and disposal routes often sit across spreadsheets, DMS notes and auction memory." icon={<ShieldCheck className="h-5 w-5" />} />
-            <MetricCard label="Product" value="Decision packs" helper="Xdealer turns every appraisal into a clear commercial position with risks, pricing and next actions." icon={<FileText className="h-5 w-5" />} />
+            <MetricCard label="Product" value="Decision packs" helper="xDealer turns every appraisal into a clear commercial position with risks, pricing and next actions." icon={<FileText className="h-5 w-5" />} />
             <MetricCard label="Outcome" value="Margin control" helper="Standardise appraisal judgement without removing senior buyer oversight." icon={<TrendingUp className="h-5 w-5" />} />
           </div>
         </section>
@@ -74,7 +72,7 @@ export function LandingPage() {
               <p className="text-sm font-semibold uppercase tracking-wide text-signal-600">Product</p>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">Commercial AI inside the vehicle workflow.</h2>
               <p className="mt-4 text-base leading-7 text-slate-600">
-                Xdealer brings VRM-first intake, appraisal evidence, CAP-style values, HPI markers, MOT advisories, prep estimates, rules and outcomes into one decision system.
+                xDealer brings VRM-first intake, appraisal evidence, CAP-style values, HPI markers, MOT advisories, prep estimates, rules and outcomes into one decision system.
               </p>
               <div className="mt-6 grid gap-3">
                 {useCases.map((item) => (

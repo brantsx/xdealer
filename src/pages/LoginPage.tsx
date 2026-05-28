@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { Card, CardBody } from "../components/ui/Card";
 import { Field, TextInput } from "../components/ui/Field";
+import { Logo } from "../components/ui/Logo";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 
@@ -38,10 +39,9 @@ export function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-10">
       <div className="w-full max-w-md">
-        <Link to="/" className="mb-6 flex items-center justify-center gap-3 text-ink-950">
-          <span className="flex h-10 w-10 items-center justify-center rounded-md bg-signal-500 text-sm font-black text-white">X</span>
-          <span className="text-xl font-semibold">Xdealer</span>
-        </Link>
+        <div className="mb-6 flex justify-center">
+          <Logo to="/" tone="dark" />
+        </div>
         <Card>
           <CardBody>
             <h1 className="text-xl font-semibold text-slate-950">Log in</h1>

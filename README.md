@@ -1,6 +1,6 @@
-# Xdealer
+# xDealer
 
-Xdealer is a production-grade MVP for a UK automotive SaaS product: the AI trading agent for used vehicle decisions.
+xDealer is a production-grade MVP for a UK automotive SaaS product: the AI trading agent for used vehicle decisions.
 
 It turns every UK vehicle appraisal into a clear commercial decision pack, showing what to offer, what the risks are, what prep is worth doing and where the vehicle should go.
 
@@ -22,7 +22,7 @@ npm run dev
 
 The app runs on `http://localhost:5173`.
 
-Without Supabase environment variables, Xdealer runs in demo mode with realistic mock data.
+Without Supabase environment variables, xDealer runs in demo mode with realistic mock data.
 
 ## Supabase Setup
 

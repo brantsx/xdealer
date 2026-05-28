@@ -1,5 +1,5 @@
 insert into public.organisations (id, name, trading_name)
-values ('11111111-1111-4111-8111-111111111111', 'Xdealer Demo Group', 'Northgate Vehicle Trading')
+values ('11111111-1111-4111-8111-111111111111', 'xDealer Demo Group', 'Northgate Vehicle Trading')
 on conflict (id) do update set name = excluded.name, trading_name = excluded.trading_name;
 
 insert into auth.users (

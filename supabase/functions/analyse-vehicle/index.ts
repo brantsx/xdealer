@@ -336,7 +336,7 @@ class OpenAiJsonProvider implements AnalysisProvider {
         input: [
           {
             role: "system",
-            content: "You are Xdealer, a UK used vehicle trading decision agent. Return JSON only matching the requested schema.",
+            content: "You are xDealer, a UK used vehicle trading decision agent. Return JSON only matching the requested schema.",
           },
           {
             role: "user",

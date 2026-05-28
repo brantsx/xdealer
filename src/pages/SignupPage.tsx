@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { Card, CardBody } from "../components/ui/Card";
 import { Field, TextInput } from "../components/ui/Field";
+import { Logo } from "../components/ui/Logo";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 
@@ -30,7 +31,7 @@ export function SignupPage() {
       pushToast({
         tone: "success",
         title: demoMode ? "Demo workspace ready" : "Workspace created",
-        message: "You can now review the Xdealer MVP.",
+        message: "You can now review the xDealer MVP.",
       });
       navigate("/app/dashboard");
     } catch (caught) {
@@ -44,10 +45,9 @@ export function SignupPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-ink-950 px-4 py-10">
       <div className="w-full max-w-md">
-        <Link to="/" className="mb-6 flex items-center justify-center gap-3 text-white">
-          <span className="flex h-10 w-10 items-center justify-center rounded-md bg-signal-500 text-sm font-black">X</span>
-          <span className="text-xl font-semibold">Xdealer</span>
-        </Link>
+        <div className="mb-6 flex justify-center">
+          <Logo to="/" tone="light" />
+        </div>
         <Card>
           <CardBody>
             <h1 className="text-xl font-semibold text-slate-950">Create workspace</h1>

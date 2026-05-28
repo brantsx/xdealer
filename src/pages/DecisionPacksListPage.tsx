@@ -66,7 +66,7 @@ export function DecisionPacksListPage() {
           <CardBody>
             <EmptyState
               title="No decision packs yet"
-              description="Analyse a vehicle to create the first Xdealer commercial decision pack."
+              description="Analyse a vehicle to create the first xDealer commercial decision pack."
               action={
                 <Link to="/app/vehicles">
                   <Button variant="secondary">Open Vehicle Inbox</Button>

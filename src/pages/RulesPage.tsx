@@ -34,7 +34,7 @@ export function RulesPage() {
     <div className="space-y-6">
       <PageHeader
         title="Rules & Strategy"
-        description="Customer-specific commercial rules that influence Xdealer decision packs, escalation logic and recommended channels."
+        description="Customer-specific commercial rules that influence xDealer decision packs, escalation logic and recommended channels."
         actions={<Button icon={<Save className="h-4 w-4" />} onClick={save}>Save rules</Button>}
       />
 

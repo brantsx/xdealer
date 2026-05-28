@@ -2,7 +2,7 @@
 
 ## Goal
 
-The Xdealer analysis agent produces a structured commercial decision pack for a UK used vehicle appraisal.
+The xDealer analysis agent produces a structured commercial decision pack for a UK used vehicle appraisal.
 
 It is not a chatbot. It is an appraisal decision system that returns JSON matching `GeneratedDecisionPackSchema`.
 

@@ -24,6 +24,7 @@ import { cx } from "../../lib/utils/format";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { LoadingState } from "../ui/LoadingState";
+import { Logo } from "../ui/Logo";
 
 const navItems = [
   { label: "Dashboard", path: "/app/dashboard", icon: Home },
@@ -45,13 +46,7 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <aside className="flex h-full w-72 shrink-0 flex-col bg-ink-950 text-white">
       <div className="flex h-16 items-center gap-3 border-b border-white/10 px-5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-signal-500 text-sm font-black text-white">
-          X
-        </div>
-        <div>
-          <p className="text-base font-semibold leading-tight">Xdealer</p>
-          <p className="text-xs text-slate-400">UK vehicle decisions</p>
-        </div>
+        <Logo tone="light" size="sm" tagline="UK vehicle decisions" />
       </div>
 
       <div className="border-b border-white/10 px-5 py-4">

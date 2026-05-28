@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-labelledby="title desc">
   <title id="title">Vehicle image placeholder</title>
-  <desc id="desc">A restrained vehicle photography placeholder for Xdealer demo records.</desc>
+  <desc id="desc">A restrained vehicle photography placeholder for xDealer demo records.</desc>
   <rect width="800" height="520" fill="#0b1728"/>
   <rect x="0" y="330" width="800" height="190" fill="#10243a"/>
   <path d="M132 320h54l58-82c16-22 42-35 69-35h184c27 0 53 13 69 35l58 82h45c26 0 47 21 47 47v44H84v-44c0-26 22-47 48-47z" fill="#f8fafc"/>

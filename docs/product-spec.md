@@ -2,13 +2,13 @@
 
 ## Positioning
 
-Xdealer is the AI trading agent for UK used vehicle decisions.
+xDealer is the AI trading agent for UK used vehicle decisions.
 
 It helps dealers, car supermarkets, auction vendors, vehicle buying businesses, leasing/fleet remarketing teams and franchised dealer groups decide what to buy, what to pay, what risks exist, what prep is worth doing, where the vehicle should go and what action to take next.
 
 ## Core Promise
 
-Xdealer turns every UK vehicle appraisal into a clear commercial decision pack, showing what to offer, what the risks are, what prep is worth doing and where the vehicle should go.
+xDealer turns every UK vehicle appraisal into a clear commercial decision pack, showing what to offer, what the risks are, what prep is worth doing and where the vehicle should go.
 
 ## MVP Areas
 

@@ -1,4 +1,4 @@
-export function LoadingState({ label = "Loading Xdealer" }: { label?: string }) {
+export function LoadingState({ label = "Loading xDealer" }: { label?: string }) {
   return (
     <div className="flex min-h-[220px] items-center justify-center rounded-lg border border-slate-200 bg-white">
       <div className="flex items-center gap-3 text-sm font-medium text-slate-600">

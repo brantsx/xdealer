@@ -2,7 +2,7 @@
 
 ## Pilot Objective
 
-Validate that Xdealer improves offer discipline, appraisal consistency, prep decisions and disposal routing for UK used vehicle workflows.
+Validate that xDealer improves offer discipline, appraisal consistency, prep decisions and disposal routing for UK used vehicle workflows.
 
 ## Suggested Pilot
 
