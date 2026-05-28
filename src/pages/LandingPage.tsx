@@ -23,7 +23,9 @@ export function LandingPage() {
               Log in
             </Link>
             <Link to="/signup">
-              <Button className="bg-white text-ink-950 hover:bg-slate-100">Book a review</Button>
+              <Button variant="secondary" className="border-white bg-white !text-ink-950 hover:bg-slate-100">
+                Book a review
+              </Button>
             </Link>
           </div>
         </div>

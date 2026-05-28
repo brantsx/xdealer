@@ -37,15 +37,11 @@ function LogoContent({ tone = "dark", size = "md", tagline, className }: Omit<Lo
         className={cx(
           "relative flex shrink-0 items-center justify-center overflow-hidden rounded-md border shadow-sm",
           sizes.mark,
-          light ? "border-white/20 bg-white text-ink-950" : "border-ink-900 bg-ink-950 text-white",
+          light ? "border-white/30 bg-white" : "border-slate-200 bg-white",
         )}
         aria-hidden="true"
       >
-        <span className="absolute inset-x-1 bottom-1 h-1 rounded-full bg-signal-500" />
-        <span className="relative -mr-0.5 font-black tracking-normal">
-          <span className="text-signal-500">x</span>
-          <span>D</span>
-        </span>
+        <span className="font-black tracking-normal text-signal-500">x</span>
       </span>
       <span className="leading-none">
         <span
