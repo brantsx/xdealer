@@ -1,4 +1,4 @@
-import { ArrowLeft, CheckCircle2, Flag, HelpCircle, ShoppingCart, UserCheck, XCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Flag, HelpCircle, ShoppingCart, Store, UserCheck, XCircle } from "lucide-react";
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
@@ -191,6 +191,26 @@ export function DecisionPackPage() {
             <ChannelBadge channel={pack.alternativeChannel} />
           </div>
           <p className="mt-4 text-sm leading-6 text-slate-700">{pack.channelRecommendation}</p>
+          {pack.marketplaceRecommendation ? (
+            <div className="mt-4 rounded-md bg-emerald-50 p-4">
+              <p className="text-sm font-semibold text-emerald-950">{pack.marketplaceRecommendation.recommendation}</p>
+              <p className="mt-2 text-sm leading-6 text-emerald-900">{pack.marketplaceRecommendation.rationale}</p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                <div className="rounded-md bg-white/70 p-3">
+                  <p className="text-xs font-semibold uppercase text-emerald-700">Listing type</p>
+                  <p className="mt-1 font-semibold text-emerald-950">{pack.marketplaceRecommendation.listingType}</p>
+                </div>
+                <div className="rounded-md bg-white/70 p-3">
+                  <p className="text-xs font-semibold uppercase text-emerald-700">Asking guide</p>
+                  <p className="mt-1 font-semibold text-emerald-950">{formatCurrency(pack.marketplaceRecommendation.suggestedAskingPrice)}</p>
+                </div>
+                <div className="rounded-md bg-white/70 p-3">
+                  <p className="text-xs font-semibold uppercase text-emerald-700">Likely buyer</p>
+                  <p className="mt-1 font-semibold text-emerald-950">{pack.marketplaceRecommendation.likelyBuyerType}</p>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </Section>
 
         <Section title="Prep recommendation">
@@ -286,6 +306,9 @@ export function DecisionPackPage() {
           <Button variant="secondary" icon={<Flag className="h-4 w-4" />} onClick={() => setOverrideOpen(true)}>Override recommendation</Button>
           <Button variant="secondary" icon={<UserCheck className="h-4 w-4" />} onClick={() => action("Senior review")}>Send to senior review</Button>
           <Button variant="secondary" icon={<HelpCircle className="h-4 w-4" />} onClick={() => action("More information requested")}>Request more information</Button>
+          <Link to={`/app/marketplace/listings/new/${vehicle.id}`}>
+            <Button variant="secondary" icon={<Store className="h-4 w-4" />}>List on Marketplace</Button>
+          </Link>
           <Button variant="secondary" icon={<ShoppingCart className="h-4 w-4" />} onClick={() => action("Bought")}>Mark as bought</Button>
           <Button variant="danger" icon={<XCircle className="h-4 w-4" />} onClick={() => action("Not bought")}>Mark as not bought</Button>
         </div>

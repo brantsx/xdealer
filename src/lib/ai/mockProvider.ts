@@ -1,6 +1,8 @@
 import type {
   AuditTrailItem,
   Channel,
+  MarketplaceRecommendation,
+  MarketplaceListingType,
   OrganisationRules,
   RecommendedAction,
   RiskFlag,
@@ -218,6 +220,15 @@ export class MockAiAnalysisProvider implements AiAnalysisProvider {
       clamp(data.score * 0.42 + appraisalScore * 0.36 + 24 - confidencePenalty),
     );
     const baseChannel = determineBaseChannel(vehicle, vehicleAge, expectedMargin, expectedPrepCost);
+    const marketplaceCandidate =
+      !vehicle.hpiStatus.includes("Write-off") &&
+      data.score >= 65 &&
+      appraisalScore >= 58 &&
+      expectedPrepCost <= valueRule.maxPrepSpend * 1.45 &&
+      (vehicle.mileage > 70000 ||
+        vehicleAge > 6 ||
+        vehicle.source === "Part-exchange" ||
+        expectedMargin < valueRule.targetMargin);
     let preferredChannel = baseChannel;
     let alternativeChannel: Channel = baseChannel === "Retail" ? "Auction" : "Trade out";
     let recommendation: RecommendedAction =
@@ -235,6 +246,10 @@ export class MockAiAnalysisProvider implements AiAnalysisProvider {
       recommendation = "Trade out";
       preferredChannel = "Trade out";
       alternativeChannel = "Auction";
+    } else if (marketplaceCandidate && expectedMargin >= valueRule.targetMargin * 0.45) {
+      recommendation = "List to dealer marketplace";
+      preferredChannel = "Dealer marketplace";
+      alternativeChannel = baseChannel === "Retail" ? "Auction" : "Trade out";
     } else if (expectedMargin < valueRule.targetMargin * 0.55) {
       recommendation = "Reject";
       preferredChannel = "Hold";
@@ -273,6 +288,8 @@ export class MockAiAnalysisProvider implements AiAnalysisProvider {
         ? vehicleAge > 6
           ? 42
           : 29
+        : preferredChannel === "Dealer marketplace"
+          ? 9
         : preferredChannel === "Auction"
           ? 12
           : 7;
@@ -289,10 +306,16 @@ export class MockAiAnalysisProvider implements AiAnalysisProvider {
         ? "Cap prep to safety-critical and saleability work only; route away from retail unless the buy price moves."
         : preferredChannel === "Retail"
           ? "Complete retail-critical prep, prioritising tyres, wheels, paint visibility and any MOT advisory items."
+          : preferredChannel === "Dealer marketplace"
+            ? "Prepare the disclosure pack, photograph known issues and avoid retail-only cosmetic work unless it lifts trade confidence."
           : "Avoid full retail prep. Prepare to an auction or trade standard and protect speed of disposal.";
     const channelRecommendation =
       preferredChannel === "Retail"
         ? "Retail is commercially viable if the vehicle is bought inside the recommended range and prep is controlled."
+        : preferredChannel === "Dealer marketplace"
+          ? `This vehicle is a poor fit for your retail profile but should be attractive to another approved dealer. Recommend listing to the dealer marketplace with a trade asking price of ${formatCurrency(
+              suggestedTradePrice,
+            )} or accepting bids above ${formatCurrency(Math.max(0, suggestedTradePrice - 450))}.`
         : preferredChannel === "Auction"
           ? "Auction is the preferred route because prep exposure or margin pressure makes retail less attractive."
           : preferredChannel === "Hold"
@@ -319,6 +342,35 @@ export class MockAiAnalysisProvider implements AiAnalysisProvider {
         evidence: `Risk appetite: ${organisationRules.riskAppetite}`,
       },
     ];
+    const marketplaceListingType: MarketplaceListingType =
+      expectedPrepCost > valueRule.maxPrepSpend || vehicle.mileage > 90000
+        ? "Timed auction"
+        : expectedMargin < valueRule.targetMargin
+          ? "Best offer"
+          : "Fixed price";
+    const marketplaceRecommendation: MarketplaceRecommendation = {
+      shouldList: preferredChannel === "Dealer marketplace" || recommendation === "Trade out",
+      recommendation:
+        preferredChannel === "Dealer marketplace"
+          ? "List to dealer marketplace"
+          : risks.some((risk) => risk.level === "Critical")
+            ? "Do not list"
+            : "List only to selected dealers",
+      listingType: marketplaceListingType,
+      suggestedAskingPrice: Math.max(0, suggestedTradePrice),
+      suggestedReserve: Math.max(0, roundToNearest(suggestedTradePrice - 550)),
+      minimumAcceptableOffer: Math.max(0, roundToNearest(suggestedTradePrice - 750)),
+      likelyBuyerType:
+        vehicle.bodyType === "Estate" || vehicle.fuelType === "Diesel"
+          ? "independent diesel estate and trade-profile buyers"
+          : vehicle.bodyType === "SUV"
+            ? "value SUV retailers and car supermarkets"
+            : "independent retail buyers looking for transparent trade stock",
+      rationale:
+        preferredChannel === "Dealer marketplace"
+          ? "The vehicle has enough evidence to trade directly, but the margin, age, mileage or prep exposure makes another dealer profile a better route than your own retail pitch."
+          : "Marketplace may still be useful for selected trade buyers, but only after risk disclosure and pricing control.",
+    };
 
     const pack: GeneratedDecisionPack = {
       overallRecommendation: recommendation,
@@ -344,12 +396,16 @@ export class MockAiAnalysisProvider implements AiAnalysisProvider {
       suggestedNextActions: [
         recommendation === "Request more information"
           ? "Complete missing appraisal fields and upload a full image set"
+          : preferredChannel === "Dealer marketplace"
+            ? "Create a dealer marketplace listing from this decision pack"
           : "Share the decision pack with the relevant buyer or remarketing manager",
         recommendation === "Senior review required"
           ? "Send to senior review before making or changing an offer"
           : `Keep the offer at or below ${formatCurrency(maximumOffer)}`,
         preferredChannel === "Retail"
           ? "Book retail-critical prep only after buy price is agreed"
+          : preferredChannel === "Dealer marketplace"
+            ? "Disclose prep issues clearly and set a minimum acceptable trade offer"
           : "Confirm auction or trade route before committing further prep spend",
       ],
       draftMessages: {
@@ -364,6 +420,7 @@ export class MockAiAnalysisProvider implements AiAnalysisProvider {
           .join(", ") || "commercial margin control"}.`,
       },
       auditTrail,
+      marketplaceRecommendation,
     };
 
     return validateGeneratedDecisionPack(pack);

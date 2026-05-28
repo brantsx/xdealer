@@ -33,16 +33,6 @@ function LogoContent({ tone = "dark", size = "md", tagline, className }: Omit<Lo
 
   return (
     <span className={cx("inline-flex items-center gap-3", className)}>
-      <span
-        className={cx(
-          "relative flex shrink-0 items-center justify-center overflow-hidden rounded-md border shadow-sm",
-          sizes.mark,
-          light ? "border-white/30 bg-white" : "border-slate-200 bg-white",
-        )}
-        aria-hidden="true"
-      >
-        <span className="font-black tracking-normal text-signal-500">x</span>
-      </span>
       <span className="leading-none">
         <span
           className={cx(

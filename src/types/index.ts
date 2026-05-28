@@ -26,10 +26,22 @@ export type RecommendedAction =
   | "Retail"
   | "Auction"
   | "Trade out"
+  | "List to dealer marketplace"
+  | "Do not list"
+  | "List only to selected dealers"
   | "Request more information"
   | "Senior review required";
 
-export type Channel = "Retail" | "Auction" | "Trade out" | "Wholesale" | "Hold";
+export type Channel =
+  | "Retail"
+  | "Auction"
+  | "Trade out"
+  | "Dealer marketplace"
+  | "Direct buyer network"
+  | "Lease/fleet remarketing"
+  | "Scrap/breaker"
+  | "Wholesale"
+  | "Hold";
 
 export type VehicleStatus =
   | "Intake"
@@ -96,6 +108,56 @@ export type RepairCategory =
 export type RiskAppetite = "Conservative" | "Balanced" | "Aggressive";
 
 export type IntegrationStatus = "Mocked" | "Planned" | "Connected";
+
+export type MarketplaceListingType =
+  | "Fixed price"
+  | "Best offer"
+  | "Timed auction"
+  | "Buy it now"
+  | "Trade-only enquiry";
+
+export type MarketplaceListingStatus =
+  | "Draft"
+  | "Live"
+  | "Under offer"
+  | "Reserved"
+  | "Sold"
+  | "Expired"
+  | "Withdrawn";
+
+export type MarketplaceVisibility =
+  | "All approved dealers"
+  | "Selected dealer groups"
+  | "Local dealers only"
+  | "Dealers matching stock profile"
+  | "Private invite-only";
+
+export type MarketplaceBidStatus =
+  | "Draft"
+  | "Submitted"
+  | "Leading"
+  | "Outbid"
+  | "Accepted"
+  | "Rejected"
+  | "Withdrawn"
+  | "Expired"
+  | "Sold"
+  | "Completed";
+
+export type MarketplaceOfferStatus =
+  | "Draft"
+  | "Submitted"
+  | "Accepted"
+  | "Rejected"
+  | "Countered"
+  | "Withdrawn"
+  | "Expired"
+  | "Sold"
+  | "Completed";
+
+export type FitLabel = "Excellent fit" | "Good fit" | "Possible fit" | "Poor fit";
+
+export type DealerVerifiedStatus = "Verified" | "Pending" | "Mock verified";
 
 export interface Organisation {
   id: UUID;
@@ -229,6 +291,17 @@ export interface DraftMessages {
   seniorReview: string;
 }
 
+export interface MarketplaceRecommendation {
+  shouldList: boolean;
+  recommendation: "List to dealer marketplace" | "Do not list" | "List only to selected dealers";
+  listingType: MarketplaceListingType;
+  suggestedAskingPrice: number;
+  suggestedReserve: number;
+  minimumAcceptableOffer: number;
+  likelyBuyerType: string;
+  rationale: string;
+}
+
 export interface DecisionPack {
   id: UUID;
   organisationId: UUID;
@@ -256,6 +329,7 @@ export interface DecisionPack {
   suggestedNextActions: string[];
   draftMessages: DraftMessages;
   auditTrail: AuditTrailItem[];
+  marketplaceRecommendation?: MarketplaceRecommendation;
   acceptedAt?: string;
   overrideReason?: string;
   createdAt: string;
@@ -351,6 +425,184 @@ export interface IntegrationConfig {
   updatedAt: string;
 }
 
+export interface DealerProfile {
+  id: UUID;
+  organisationId: UUID;
+  tradingName: string;
+  companyNumber: string;
+  vatNumber?: string;
+  fcaStatusNote?: string;
+  address: string;
+  postcodeArea: string;
+  contactName: string;
+  phone: string;
+  email: string;
+  website?: string;
+  description: string;
+  stockWanted: string;
+  stockNotWanted: string;
+  preferredMakes: string[];
+  excludedMakes: string[];
+  preferredBodyTypes: BodyType[];
+  preferredFuelTypes: FuelType[];
+  minVehicleAge: number;
+  maxVehicleAge: number;
+  minMileage: number;
+  maxMileage: number;
+  minPrice: number;
+  maxPrice: number;
+  transportRadiusMiles: number;
+  verifiedStatus: DealerVerifiedStatus;
+  rating: number;
+  tradeTerms: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MarketplaceListingPhoto {
+  id: UUID;
+  listingId: UUID;
+  vehiclePhotoId: UUID;
+  isPrimary: boolean;
+  isVisible: boolean;
+  sortOrder: number;
+  createdAt: string;
+}
+
+export interface MarketplaceListing {
+  id: UUID;
+  organisationId: UUID;
+  vehicleId: UUID;
+  sellerProfileId: UUID;
+  listingType: MarketplaceListingType;
+  status: MarketplaceListingStatus;
+  title: string;
+  description: string;
+  askingPrice: number;
+  reservePrice: number;
+  buyNowPrice?: number;
+  minimumOffer: number;
+  bidIncrement: number;
+  currentHighestBid?: number;
+  currentHighestBidId?: UUID;
+  startsAt: string;
+  endsAt?: string;
+  visibilityType: MarketplaceVisibility;
+  location: string;
+  postcodeArea: string;
+  vatMarginNote: string;
+  buyerFeeNote?: string;
+  sellerDeclarationAccepted: boolean;
+  bodyworkSummary: string;
+  interiorSummary: string;
+  mechanicalSummary: string;
+  knownIssues: string;
+  prepRecommendation: string;
+  auditNotes: string[];
+  documents: string[];
+  views: number;
+  watchers: number;
+  publishedAt?: string;
+  soldAt?: string;
+  withdrawnAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MarketplaceBid {
+  id: UUID;
+  listingId: UUID;
+  bidderOrganisationId: UUID;
+  bidderUserId: UUID;
+  amount: number;
+  status: MarketplaceBidStatus;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MarketplaceOffer {
+  id: UUID;
+  listingId: UUID;
+  buyerOrganisationId: UUID;
+  buyerUserId: UUID;
+  sellerOrganisationId: UUID;
+  amount: number;
+  status: MarketplaceOfferStatus;
+  message: string;
+  counterAmount?: number;
+  counterMessage?: string;
+  expiresAt?: string;
+  nextSteps: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MarketplaceQuestion {
+  id: UUID;
+  listingId: UUID;
+  buyerOrganisationId: UUID;
+  buyerUserId: UUID;
+  question: string;
+  answer?: string;
+  answeredBy?: UUID;
+  answeredAt?: string;
+  visibility: "Approved dealers" | "Private";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MarketplaceWatch {
+  id: UUID;
+  listingId: UUID;
+  organisationId: UUID;
+  userId: UUID;
+  createdAt: string;
+}
+
+export interface MarketplaceAnalysis {
+  id: UUID;
+  listingId: UUID;
+  buyerOrganisationId: UUID;
+  decisionPackId?: UUID;
+  fitScore: number;
+  fitLabel: FitLabel;
+  recommendedMaxBid: number;
+  expectedMargin: number;
+  expectedMarginMin: number;
+  expectedMarginMax: number;
+  riskRating: RiskLevel;
+  tradeDesirabilityScore: number;
+  retailFitScore: number;
+  suggestedChannel: Channel;
+  reasons: string[];
+  risksToCheck: string[];
+  analysisJson: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface MarketplaceEvent {
+  id: UUID;
+  listingId: UUID;
+  organisationId: UUID;
+  userId: UUID;
+  eventType: string;
+  eventJson: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface MarketplaceBundle {
+  listings: MarketplaceListing[];
+  listingPhotos: MarketplaceListingPhoto[];
+  bids: MarketplaceBid[];
+  offers: MarketplaceOffer[];
+  questions: MarketplaceQuestion[];
+  watchlist: MarketplaceWatch[];
+  dealerProfiles: DealerProfile[];
+  analyses: MarketplaceAnalysis[];
+  events: MarketplaceEvent[];
+}
+
 export interface AuditEvent {
   id: UUID;
   organisationId: UUID;
@@ -371,4 +623,11 @@ export interface DashboardMetrics {
   humanOverrideRate: number;
   vehiclesByChannel: Array<{ channel: Channel; count: number; margin: number }>;
   topRiskThemes: Array<{ theme: string; count: number; impact: number }>;
+  liveMarketplaceListings: number;
+  marketplaceSoldReserved: number;
+  bidsOffersThisMonth: number;
+  averageTimeToFirstOfferHours: number;
+  estimatedMarketplaceMarginRecovered: number;
+  topBuyerDemandCategories: Array<{ category: string; count: number }>;
+  watchedVehiclesEndingSoon: number;
 }

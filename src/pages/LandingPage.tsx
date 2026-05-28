@@ -38,7 +38,7 @@ export function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/88 to-ink-950/35" />
         <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-center px-4 pb-20 pt-28 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold tracking-[0.18em] text-emerald-300">xDealer</p>
+            <p className="text-sm font-semibold tracking-[0.18em] text-emerald-300">STOCK DECISION ENGINE</p>
             <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
               The AI trading agent for UK used vehicle decisions.
             </h1>

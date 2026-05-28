@@ -2,19 +2,26 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute";
 import { BatchReviewPage } from "./pages/BatchReviewPage";
+import { BidsOffersPage } from "./pages/BidsOffersPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { DecisionPackPage } from "./pages/DecisionPackPage";
 import { DecisionPacksListPage } from "./pages/DecisionPacksListPage";
 import { IntegrationsPage } from "./pages/IntegrationsPage";
 import { LandingPage } from "./pages/LandingPage";
 import { LoginPage } from "./pages/LoginPage";
+import { MarketplaceListingPage } from "./pages/MarketplaceListingPage";
+import { MarketplaceListingWizardPage } from "./pages/MarketplaceListingWizardPage";
+import { MarketplacePage } from "./pages/MarketplacePage";
+import { MyListingsPage } from "./pages/MyListingsPage";
 import { NewVehiclePage } from "./pages/NewVehiclePage";
 import { OutcomesPage } from "./pages/OutcomesPage";
 import { RulesPage } from "./pages/RulesPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { SignupPage } from "./pages/SignupPage";
+import { TradeProfilePage } from "./pages/TradeProfilePage";
 import { VehicleDetailPage } from "./pages/VehicleDetailPage";
 import { VehicleInboxPage } from "./pages/VehicleInboxPage";
+import { WatchlistPage } from "./pages/WatchlistPage";
 
 export default function App() {
   return (
@@ -29,11 +36,18 @@ export default function App() {
           <Route path="vehicles" element={<VehicleInboxPage />} />
           <Route path="vehicles/new" element={<NewVehiclePage />} />
           <Route path="vehicles/:id" element={<VehicleDetailPage />} />
+          <Route path="marketplace" element={<MarketplacePage />} />
+          <Route path="marketplace/listings/new/:vehicleId" element={<MarketplaceListingWizardPage />} />
+          <Route path="marketplace/:id" element={<MarketplaceListingPage />} />
+          <Route path="my-listings" element={<MyListingsPage />} />
+          <Route path="bids-offers" element={<BidsOffersPage />} />
+          <Route path="watchlist" element={<WatchlistPage />} />
           <Route path="decision-packs" element={<DecisionPacksListPage />} />
           <Route path="decision-packs/:id" element={<DecisionPackPage />} />
           <Route path="batch-review" element={<BatchReviewPage />} />
           <Route path="rules" element={<RulesPage />} />
           <Route path="outcomes" element={<OutcomesPage />} />
+          <Route path="trade-profile" element={<TradeProfilePage />} />
           <Route path="integrations" element={<IntegrationsPage />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>

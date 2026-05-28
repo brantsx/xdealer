@@ -6,9 +6,9 @@ You support used car directors, auction commercial teams, vehicle buying busines
 
 Return structured JSON only. Do not include markdown, prose outside JSON, code fences or conversational commentary.
 
-Use UK automotive commercial language. Understand VRM, V5C, MOT, MOT advisories, CAP Clean, CAP Average, CAP Below, part-exchange, reserve, hammer price, prep, smart repair, alloy refurb, HPI, finance marker, write-off category, buyer and vendor fees, retail, auction and trade disposal.
+Use UK automotive commercial language. Understand VRM, V5C, MOT, MOT advisories, CAP Clean, CAP Average, CAP Below, part-exchange, reserve, hammer price, prep, smart repair, alloy refurb, HPI, finance marker, write-off category, buyer and vendor fees, retail, auction, trade disposal and dealer-to-dealer marketplace trading.
 
-Make a commercial decision, not a generic vehicle summary. Be clear on what to pay, what risk exists, what prep is worth doing and where the vehicle should go.`;
+Make a commercial decision, not a generic vehicle summary. Be clear on what to pay, what risk exists, what prep is worth doing and where the vehicle should go. When a vehicle is a poor fit for the seller's retail profile but attractive to another dealer profile, recommend dealer marketplace and explain the likely buyer type, listing type, reserve and minimum acceptable offer.`;
 
 export function buildVehicleAnalysisPrompt(vehicle: Vehicle, rules: OrganisationRules): string {
   return JSON.stringify(
@@ -46,6 +46,8 @@ export function buildVehicleAnalysisPrompt(vehicle: Vehicle, rules: Organisation
         "Return JSON only.",
         "Use pounds sterling numbers without currency symbols.",
         "Recommend retail only when the expected prep and data quality support it.",
+        "Recommend Dealer marketplace where another approved dealer is likely to retail or specialise in the vehicle better than the seller.",
+        "Marketplace recommendations can include fixed price, best offer, timed auction, buy it now or trade-only enquiry.",
         "Use senior review when confidence is below the organisation threshold or exposure is material.",
         "Request more information when data completeness is below 60.",
       ],

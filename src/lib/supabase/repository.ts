@@ -8,6 +8,7 @@ import type {
   DraftMessages,
   IntegrationConfig,
   MarketInput,
+  MarketplaceRecommendation,
   Organisation,
   OrganisationRules,
   Outcome,
@@ -157,6 +158,7 @@ interface DecisionPackRow {
   suggested_next_actions: string[];
   draft_messages: DraftMessages;
   audit_trail: AuditTrailItem[];
+  marketplace_recommendation: MarketplaceRecommendation | null;
   accepted_at: string | null;
   override_reason: string | null;
   created_at: string;
@@ -349,6 +351,7 @@ function mapDecisionPack(row: DecisionPackRow): DecisionPack {
     suggestedNextActions: row.suggested_next_actions,
     draftMessages: row.draft_messages,
     auditTrail: row.audit_trail,
+    marketplaceRecommendation: row.marketplace_recommendation ?? undefined,
     acceptedAt: row.accepted_at ?? undefined,
     overrideReason: row.override_reason ?? undefined,
     createdAt: row.created_at,
@@ -673,6 +676,37 @@ export async function createOnboardingWorkspace({
     })),
   );
   if (integrationsError) throw integrationsError;
+
+  await client.from("dealer_profiles").insert({
+    id: crypto.randomUUID(),
+    organisation_id: organisationId,
+    trading_name: organisationName,
+    company_number: "Pending",
+    address: "Trading address pending",
+    postcode_area: "UK",
+    contact_name: fullName,
+    phone: "Pending",
+    email,
+    description: "New xDealer marketplace profile pending verification.",
+    stock_wanted: "Configure preferred stock profile.",
+    stock_not_wanted: "Configure excluded stock profile.",
+    preferred_makes: [],
+    excluded_makes: [],
+    preferred_body_types: ["Hatchback", "SUV", "Estate"],
+    preferred_fuel_types: ["Petrol", "Diesel", "Hybrid", "Electric"],
+    min_vehicle_age: 0,
+    max_vehicle_age: 10,
+    min_mileage: 0,
+    max_mileage: 100000,
+    min_price: 0,
+    max_price: 50000,
+    transport_radius_miles: 100,
+    verified_status: "Pending",
+    rating: 0,
+    trade_terms: "Trade terms pending.",
+    created_at: timestamp,
+    updated_at: timestamp,
+  });
 
   return {
     profile: mapProfile(profile),

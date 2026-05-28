@@ -15,6 +15,9 @@ const GeneratedDecisionPackSchema = z.object({
     "Retail",
     "Auction",
     "Trade out",
+    "List to dealer marketplace",
+    "Do not list",
+    "List only to selected dealers",
     "Request more information",
     "Senior review required",
   ]),
@@ -24,8 +27,8 @@ const GeneratedDecisionPackSchema = z.object({
   recommendedReserve: z.number().nonnegative(),
   suggestedRetailPrice: z.number().nonnegative(),
   suggestedTradePrice: z.number().nonnegative(),
-  preferredChannel: z.enum(["Retail", "Auction", "Trade out", "Wholesale", "Hold"]),
-  alternativeChannel: z.enum(["Retail", "Auction", "Trade out", "Wholesale", "Hold"]),
+  preferredChannel: z.enum(["Retail", "Auction", "Trade out", "Dealer marketplace", "Direct buyer network", "Lease/fleet remarketing", "Scrap/breaker", "Wholesale", "Hold"]),
+  alternativeChannel: z.enum(["Retail", "Auction", "Trade out", "Dealer marketplace", "Direct buyer network", "Lease/fleet remarketing", "Scrap/breaker", "Wholesale", "Hold"]),
   confidenceScore: z.number().min(0).max(100),
   dataCompletenessScore: z.number().min(0).max(100),
   appraisalQualityScore: z.number().min(0).max(100),
@@ -53,6 +56,16 @@ const GeneratedDecisionPackSchema = z.object({
     detail: z.string(),
     evidence: z.string(),
   })).min(1),
+  marketplaceRecommendation: z.object({
+    shouldList: z.boolean(),
+    recommendation: z.enum(["List to dealer marketplace", "Do not list", "List only to selected dealers"]),
+    listingType: z.enum(["Fixed price", "Best offer", "Timed auction", "Buy it now", "Trade-only enquiry"]),
+    suggestedAskingPrice: z.number().nonnegative(),
+    suggestedReserve: z.number().nonnegative(),
+    minimumAcceptableOffer: z.number().nonnegative(),
+    likelyBuyerType: z.string(),
+    rationale: z.string(),
+  }).optional(),
 });
 
 type GeneratedDecisionPack = z.infer<typeof GeneratedDecisionPackSchema>;
@@ -240,11 +253,19 @@ class DeterministicMockProvider implements AnalysisProvider {
     if (vehicle.hpi_status !== "Clear" || appraisal.warning_lights.trim()) preferredChannel = "Trade out";
     let overallRecommendation: GeneratedDecisionPack["overallRecommendation"] =
       preferredChannel === "Retail" ? "Retail" : preferredChannel;
+    const marketplaceCandidate =
+      vehicle.hpi_status === "Clear" &&
+      dataCompletenessScore >= 65 &&
+      appraisalQualityScore >= 58 &&
+      (vehicle.mileage > 70000 || age > 6 || vehicle.source === "Part-exchange" || expectedMargin < band.targetMargin);
     if (dataCompletenessScore < 60) {
       overallRecommendation = "Request more information";
       preferredChannel = "Hold";
     } else if (confidenceScore < rules.minimum_confidence_for_auto_approval) {
       overallRecommendation = "Senior review required";
+    } else if (marketplaceCandidate && expectedMargin >= band.targetMargin * 0.45) {
+      overallRecommendation = "List to dealer marketplace";
+      preferredChannel = "Dealer marketplace";
     } else if (expectedMargin < band.targetMargin * 0.55) {
       overallRecommendation = "Reject";
       preferredChannel = "Hold";
@@ -260,6 +281,25 @@ class DeterministicMockProvider implements AnalysisProvider {
       marketInput.retail_market_estimate - band.targetMargin - expectedPrepCost - marketInput.buyer_fees,
     )));
     const title = `${vehicle.make} ${vehicle.model} ${vehicle.derivative}`;
+    const suggestedTradePrice = round(marketInput.trade_value_estimate - expectedPrepCost * 0.2);
+    const marketplaceRecommendation: GeneratedDecisionPack["marketplaceRecommendation"] = {
+      shouldList: preferredChannel === "Dealer marketplace" || preferredChannel === "Trade out",
+      recommendation:
+        preferredChannel === "Dealer marketplace"
+          ? "List to dealer marketplace"
+          : keyRisks.some((risk) => risk.level === "Critical")
+            ? "Do not list"
+            : "List only to selected dealers",
+      listingType: expectedPrepCost > band.maxPrepSpend || vehicle.mileage > 90000 ? "Timed auction" : expectedMargin < band.targetMargin ? "Best offer" : "Fixed price",
+      suggestedAskingPrice: Math.max(0, suggestedTradePrice),
+      suggestedReserve: Math.max(0, round(suggestedTradePrice - 550)),
+      minimumAcceptableOffer: Math.max(0, round(suggestedTradePrice - 750)),
+      likelyBuyerType: vehicle.body_type === "Estate" || vehicle.fuel_type === "Diesel" ? "independent diesel estate and trade-profile buyers" : "approved independent retail buyers",
+      rationale:
+        preferredChannel === "Dealer marketplace"
+          ? "This vehicle is a poor fit for the seller profile but should be attractive to another dealer with the right forecourt, stock appetite or prep tolerance."
+          : "Marketplace may be suitable only after pricing and risk disclosure controls.",
+    };
     const analysis: GeneratedDecisionPack = {
       overallRecommendation,
       recommendedOfferMin: Math.max(0, maximumOffer - 650),
@@ -267,7 +307,7 @@ class DeterministicMockProvider implements AnalysisProvider {
       maximumOffer,
       recommendedReserve: Math.max(0, round(preferredChannel === "Auction" ? marketInput.cap_average - expectedPrepCost * 0.35 : marketInput.trade_value_estimate)),
       suggestedRetailPrice: round(marketInput.retail_market_estimate, 100),
-      suggestedTradePrice: round(marketInput.trade_value_estimate - expectedPrepCost * 0.2),
+      suggestedTradePrice,
       preferredChannel,
       alternativeChannel: preferredChannel === "Retail" ? "Auction" : "Trade out",
       confidenceScore,
@@ -286,6 +326,8 @@ class DeterministicMockProvider implements AnalysisProvider {
         : "Avoid full retail prep. Prepare to auction or trade disposal standard.",
       channelRecommendation: preferredChannel === "Retail"
         ? "Retail is commercially viable if the vehicle is bought inside the recommended range and prep is controlled."
+        : preferredChannel === "Dealer marketplace"
+          ? `Recommend listing to the dealer marketplace with a trade asking price of ${formatCurrency(suggestedTradePrice)} and a minimum acceptable offer of ${formatCurrency(Math.max(0, suggestedTradePrice - 750))}.`
         : preferredChannel === "Auction"
           ? "Auction is preferred because prep exposure or margin pressure makes retail less attractive."
           : preferredChannel === "Hold"
@@ -294,7 +336,7 @@ class DeterministicMockProvider implements AnalysisProvider {
       suggestedNextActions: [
         dataCompletenessScore < 60 ? "Complete missing appraisal evidence" : `Keep the offer at or below ${formatCurrency(maximumOffer)}`,
         overallRecommendation === "Senior review required" ? "Send to senior review before offer commitment" : "Share decision pack with the responsible buyer",
-        preferredChannel === "Retail" ? "Book retail-critical prep after commercial approval" : "Confirm disposal route before further prep spend",
+        preferredChannel === "Retail" ? "Book retail-critical prep after commercial approval" : preferredChannel === "Dealer marketplace" ? "Create a dealer marketplace listing from this decision pack" : "Confirm disposal route before further prep spend",
       ],
       draftMessages: {
         customerVendor: `We have reviewed ${vehicle.vrm} and can proceed subject to evidence at a maximum commercial position of ${formatCurrency(maximumOffer)}.`,
@@ -313,6 +355,7 @@ class DeterministicMockProvider implements AnalysisProvider {
           evidence: `Risk appetite: ${rules.risk_appetite}`,
         },
       ],
+      marketplaceRecommendation,
     };
     return GeneratedDecisionPackSchema.parse(analysis);
   }
@@ -448,6 +491,7 @@ serve(async (request) => {
         suggested_next_actions: analysis.suggestedNextActions,
         draft_messages: analysis.draftMessages,
         audit_trail: analysis.auditTrail,
+        marketplace_recommendation: analysis.marketplaceRecommendation,
       })
       .select("id")
       .returns<{ id: string }>()

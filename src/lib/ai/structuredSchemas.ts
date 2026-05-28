@@ -9,11 +9,32 @@ export const RecommendedActionSchema = z.enum([
   "Retail",
   "Auction",
   "Trade out",
+  "List to dealer marketplace",
+  "Do not list",
+  "List only to selected dealers",
   "Request more information",
   "Senior review required",
 ]);
 
-export const ChannelSchema = z.enum(["Retail", "Auction", "Trade out", "Wholesale", "Hold"]);
+export const ChannelSchema = z.enum([
+  "Retail",
+  "Auction",
+  "Trade out",
+  "Dealer marketplace",
+  "Direct buyer network",
+  "Lease/fleet remarketing",
+  "Scrap/breaker",
+  "Wholesale",
+  "Hold",
+]);
+
+export const MarketplaceListingTypeSchema = z.enum([
+  "Fixed price",
+  "Best offer",
+  "Timed auction",
+  "Buy it now",
+  "Trade-only enquiry",
+]);
 
 export const RiskFlagSchema = z.object({
   level: RiskLevelSchema,
@@ -32,6 +53,17 @@ export const AuditTrailItemSchema = z.object({
   label: z.string().min(2),
   detail: z.string().min(2),
   evidence: z.string().min(2),
+});
+
+export const MarketplaceRecommendationSchema = z.object({
+  shouldList: z.boolean(),
+  recommendation: z.enum(["List to dealer marketplace", "Do not list", "List only to selected dealers"]),
+  listingType: MarketplaceListingTypeSchema,
+  suggestedAskingPrice: z.number().nonnegative(),
+  suggestedReserve: z.number().nonnegative(),
+  minimumAcceptableOffer: z.number().nonnegative(),
+  likelyBuyerType: z.string().min(2),
+  rationale: z.string().min(2),
 });
 
 export const GeneratedDecisionPackSchema = z.object({
@@ -58,6 +90,7 @@ export const GeneratedDecisionPackSchema = z.object({
   suggestedNextActions: z.array(z.string()).min(1),
   draftMessages: DraftMessagesSchema,
   auditTrail: z.array(AuditTrailItemSchema).min(1),
+  marketplaceRecommendation: MarketplaceRecommendationSchema.optional(),
 });
 
 export type GeneratedDecisionPack = z.infer<typeof GeneratedDecisionPackSchema>;

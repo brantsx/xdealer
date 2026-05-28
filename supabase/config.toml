@@ -27,3 +27,18 @@ enable_signup = true
 
 [functions.analyse-vehicle]
 verify_jwt = true
+
+[functions.analyse-marketplace-listing]
+verify_jwt = true
+
+[functions.publish-marketplace-listing]
+verify_jwt = true
+
+[functions.place-bid]
+verify_jwt = true
+
+[functions.make-offer]
+verify_jwt = true
+
+[functions.respond-offer]
+verify_jwt = true

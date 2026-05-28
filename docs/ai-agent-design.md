@@ -20,6 +20,9 @@ It is not a chatbot. It is an appraisal decision system that returns JSON matchi
 - Appraisal condition and notes
 - Damage entries and photo metadata
 - Organisation rules
+- Seller dealer profile and stock profile
+- Buyer dealer profile and stock profile for marketplace analysis
+- Listing type, asking price, reserve, minimum offer and current highest bid
 
 ## Provider Abstraction
 
@@ -34,6 +37,7 @@ Frontend files:
 Backend:
 
 - `supabase/functions/analyse-vehicle/index.ts`
+- `supabase/functions/analyse-marketplace-listing/index.ts`
 
 If no AI key is available, the deterministic mock provider is used. Live AI is guarded by provider abstraction and `ENABLE_LIVE_AI`.
 
@@ -43,9 +47,15 @@ If no AI key is available, the deterministic mock provider is used. Live AI is g
 - Tyre, brake or suspension MOT advisories increase prep risk.
 - Missing service history on premium vehicles lowers confidence.
 - Prep above the value-band rule can route the vehicle to auction or trade.
+- A poor retail fit with good trade appetite can route the vehicle to Dealer marketplace.
+- Buyer marketplace analysis scores fit against preferred makes, body type, fuel, age, mileage, prep tolerance, risk appetite and expected margin.
 - Low data completeness requests more information.
 - Confidence below the organisation threshold requires senior review.
 
 ## Output Contract
 
 The agent must return structured JSON only. Free text outside the schema is rejected by validation before saving.
+
+Decision packs can include `marketplaceRecommendation` with list/do-not-list guidance, listing type, asking guide, reserve, minimum acceptable offer, likely buyer type and rationale.
+
+Marketplace analysis returns buyer-private JSON with fit score, fit label, recommended maximum bid, expected margin, risk rating, reasons and risks to check.

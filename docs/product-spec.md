@@ -19,6 +19,11 @@ xDealer turns every UK vehicle appraisal into a clear commercial decision pack, 
 - New Vehicle VRM-first intake
 - Vehicle detail and appraisal record
 - AI decision pack generation
+- Dealer marketplace browse, listing and buyer analysis
+- My Listings
+- Bids & Offers
+- Watchlist
+- Trade Profile
 - Decision Pack feedback workflow
 - Batch Review
 - Rules & Strategy
@@ -39,3 +44,11 @@ xDealer turns every UK vehicle appraisal into a clear commercial decision pack, 
 ## Decision Pack Output
 
 Each decision pack includes recommendation, offer range, maximum offer, reserve, retail and trade price, channel recommendation, confidence, completeness, appraisal quality, expected margin, expected prep, days to sale, risks, missing information, prep guidance, next actions, draft messages and audit trail.
+
+## Marketplace Extension
+
+Core positioning: capture the vehicle once, then decide whether to retail, auction, trade out or list it to other dealers.
+
+Sellers can publish fixed price, best offer, timed auction, buy it now and trade-only enquiry listings. Buyers can browse approved dealer stock, view condition disclosure, ask questions, watch vehicles, place bids, make offers and run buyer-specific xDealer analysis.
+
+Marketplace channels now include Dealer marketplace, Direct buyer network, Lease/fleet remarketing and Scrap/breaker alongside Retail, Auction and Trade out.

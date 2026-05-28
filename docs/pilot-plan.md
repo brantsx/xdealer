@@ -10,9 +10,10 @@ Validate that xDealer improves offer discipline, appraisal consistency, prep dec
 2. Load 100 recent appraisal records through CSV or manual intake.
 3. Generate decision packs in mock integration mode.
 4. Compare recommendations against actual buy, prep and sale outcomes.
-5. Capture buyer overrides and reasons.
-6. Adjust value-band margin and prep rules.
-7. Connect one valuation/provenance feed and one outcome feed.
+5. Publish selected profile-miss vehicles to the marketplace in mock workflow mode.
+6. Capture buyer overrides, bids, offers, watchlist behaviour and accepted-offer next steps.
+7. Adjust value-band margin, prep rules and trade profile matching rules.
+8. Connect one valuation/provenance feed and one outcome feed.
 
 ## Success Metrics
 
@@ -22,6 +23,9 @@ Validate that xDealer improves offer discipline, appraisal consistency, prep dec
 - Lower prep overspend
 - More consistent route-to-market decisions
 - Lower post-sale dispute exposure
+- Faster time to first trade offer
+- Margin recovered from direct trade disposals
+- Fewer vehicles sent to auction when direct dealer demand exists
 
 ## Next Build Steps
 
@@ -31,3 +35,5 @@ Validate that xDealer improves offer discipline, appraisal consistency, prep dec
 - CSV import parser and validation.
 - Outcome variance analysis.
 - Live CAP/HPI, DMS and auction pilots.
+- Dealer verification/KYC workflow.
+- Payment, escrow, trade contract and transport integration discovery.

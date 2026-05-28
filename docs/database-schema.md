@@ -1,6 +1,8 @@
 # Database Schema
 
-The schema is defined in `supabase/migrations/20260527120000_initial_xdealer_schema.sql`.
+The core schema is defined in `supabase/migrations/20260527120000_initial_xdealer_schema.sql`.
+
+Marketplace additions live in `supabase/migrations/20260528120000_marketplace.sql`.
 
 ## Tenant Model
 
@@ -22,6 +24,18 @@ Core tables:
 - `integrations`
 - `audit_events`
 
+Marketplace tables:
+
+- `dealer_profiles`
+- `marketplace_listings`
+- `marketplace_listing_photos`
+- `marketplace_bids`
+- `marketplace_offers`
+- `marketplace_questions`
+- `marketplace_watchlist`
+- `marketplace_analysis`
+- `marketplace_events`
+
 ## Storage
 
 The migration creates a private `vehicle-photos` bucket. Object paths are expected to start with the tenant UUID:
@@ -35,6 +49,8 @@ Storage RLS policies restrict reads and writes to objects under the current orga
 ## Seed Data
 
 `supabase/seed/demo.sql` creates one demo organisation with users, rules, integrations and 10 UK-style vehicles with valuations, appraisals, MOT advisories and damage entries.
+
+The marketplace seed adds three additional dealer organisations/profiles, 10 more UK vehicles, 12 live marketplace listings, 4 draft listings, sold/reserved examples, bids, offers, watchlist records, questions, buyer analyses and marketplace events.
 
 For local Supabase development the seed also creates a confirmed auth user:
 

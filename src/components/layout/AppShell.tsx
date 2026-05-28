@@ -6,6 +6,8 @@ import {
   FileText,
   Gauge,
   Home,
+  HandCoins,
+  Heart,
   Layers3,
   LogOut,
   Menu,
@@ -14,6 +16,8 @@ import {
   Settings,
   ShieldCheck,
   SlidersHorizontal,
+  Store,
+  UserRoundCog,
   X,
 } from "lucide-react";
 import { useState } from "react";
@@ -30,10 +34,15 @@ const navItems = [
   { label: "Dashboard", path: "/app/dashboard", icon: Home },
   { label: "Vehicle Inbox", path: "/app/vehicles", icon: Car },
   { label: "New Vehicle", path: "/app/vehicles/new", icon: Plus },
+  { label: "Marketplace", path: "/app/marketplace", icon: Store },
+  { label: "My Listings", path: "/app/my-listings", icon: ClipboardCheck },
+  { label: "Bids & Offers", path: "/app/bids-offers", icon: HandCoins },
+  { label: "Watchlist", path: "/app/watchlist", icon: Heart },
   { label: "Batch Review", path: "/app/batch-review", icon: Layers3 },
   { label: "Decision Packs", path: "/app/decision-packs", icon: FileText },
   { label: "Rules & Strategy", path: "/app/rules", icon: SlidersHorizontal },
   { label: "Outcomes", path: "/app/outcomes", icon: BarChart3 },
+  { label: "Trade Profile", path: "/app/trade-profile", icon: UserRoundCog },
   { label: "Integrations", path: "/app/integrations", icon: PlugZap },
   { label: "Settings", path: "/app/settings", icon: Settings },
 ];

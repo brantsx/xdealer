@@ -11,6 +11,7 @@ It turns every UK vehicle appraisal into a clear commercial decision pack, showi
 - Supabase auth, PostgreSQL, RLS, Storage and Edge Functions
 - Deterministic mock AI mode with a provider abstraction for future live model use
 - Mock adapter interfaces for CAP/HPI, Auto Trader-style retail market data, auction and MOT history
+- Dealer-to-dealer marketplace module with mock bids, offers, watchlist and buyer-specific analysis
 
 ## Local Setup
 
@@ -62,6 +63,11 @@ Deploy the vehicle analysis function:
 
 ```bash
 supabase functions deploy analyse-vehicle
+supabase functions deploy analyse-marketplace-listing
+supabase functions deploy publish-marketplace-listing
+supabase functions deploy place-bid
+supabase functions deploy make-offer
+supabase functions deploy respond-offer
 ```
 
 Set server-side secrets if live AI is enabled later:
@@ -78,6 +84,8 @@ supabase secrets set ENABLE_LIVE_AI=false
 
 The MVP uses deterministic analysis when no AI key is present. The mock logic considers CAP-style values, proposed offer, appraisal quality, MOT advisories, HPI status, service history, damage entries, expected prep and organisation rules.
 
+Marketplace mock AI also compares listings against a buyer organisation's trade profile and rules, returning fit score, recommended maximum bid, expected margin, risk rating and reasons to check before bidding.
+
 Key files:
 
 - `src/lib/ai/types.ts`
@@ -86,6 +94,21 @@ Key files:
 - `src/lib/ai/mockProvider.ts`
 - `src/lib/ai/structuredSchemas.ts`
 - `supabase/functions/analyse-vehicle/index.ts`
+- `supabase/functions/analyse-marketplace-listing/index.ts`
+
+## Marketplace Module
+
+Routes:
+
+- `/app/marketplace`
+- `/app/marketplace/:id`
+- `/app/marketplace/listings/new/:vehicleId`
+- `/app/my-listings`
+- `/app/bids-offers`
+- `/app/watchlist`
+- `/app/trade-profile`
+
+The marketplace has no real payments, escrow, legal contracts, transport booking or live verification. It uses workflow statuses and mocked events so pilots can validate the trade-to-trade stock exchange before regulated or paid services are added.
 
 ## Future Integration Notes
 

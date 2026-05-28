@@ -1,4 +1,4 @@
-import { AlertTriangle, BarChart3, Car, ClipboardCheck, Gauge, ShieldAlert, TrendingUp, Users } from "lucide-react";
+import { AlertTriangle, BarChart3, Car, ClipboardCheck, Clock, Gauge, HandCoins, ShieldAlert, Store, TrendingUp, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ActionBadge, ChannelBadge, ConfidenceBadge, RiskBadge } from "../components/ui/Badge";
 import { Button } from "../components/ui/Button";
@@ -72,6 +72,24 @@ export function DashboardPage() {
           helper="Tracks governance where buyers move away from AI recommendations."
           icon={<Users className="h-5 w-5" />}
         />
+        <MetricCard
+          label="Live marketplace listings"
+          value={formatNumber(metrics.liveMarketplaceListings)}
+          helper="Approved dealer-to-dealer listings visible in the private marketplace."
+          icon={<Store className="h-5 w-5" />}
+        />
+        <MetricCard
+          label="Marketplace sold/reserved"
+          value={formatNumber(metrics.marketplaceSoldReserved)}
+          helper="Mock workflow status for vehicles reserved or sold through the trade exchange."
+          icon={<HandCoins className="h-5 w-5" />}
+        />
+        <MetricCard
+          label="Average time to first offer"
+          value={`${metrics.averageTimeToFirstOfferHours}h`}
+          helper={`${metrics.bidsOffersThisMonth} bids and offers recorded this month.`}
+          icon={<Clock className="h-5 w-5" />}
+        />
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
@@ -111,6 +129,34 @@ export function DashboardPage() {
                 No material risks flagged yet.
               </div>
             ) : null}
+          </CardBody>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        <Card>
+          <CardHeader title="Marketplace recovery" eyebrow="Trade-to-trade disposal" />
+          <CardBody className="space-y-4">
+            <div className="rounded-md bg-emerald-50 p-4">
+              <p className="text-xs font-semibold uppercase text-emerald-700">Estimated margin recovered</p>
+              <p className="mt-1 text-2xl font-semibold text-emerald-950">{formatCurrency(metrics.estimatedMarketplaceMarginRecovered)}</p>
+            </div>
+            <div className="rounded-md bg-amber-50 p-4">
+              <p className="text-xs font-semibold uppercase text-amber-700">Watched vehicles ending soon</p>
+              <p className="mt-1 text-2xl font-semibold text-amber-950">{metrics.watchedVehiclesEndingSoon}</p>
+            </div>
+          </CardBody>
+        </Card>
+
+        <Card>
+          <CardHeader title="Top buyer demand categories" eyebrow="Marketplace signal" />
+          <CardBody className="space-y-3">
+            {metrics.topBuyerDemandCategories.map((item) => (
+              <div key={item.category} className="flex items-center justify-between gap-4 rounded-md bg-slate-50 p-3">
+                <span className="text-sm font-semibold text-slate-950">{item.category}</span>
+                <span className="text-sm font-semibold text-signal-700">{item.count} active signals</span>
+              </div>
+            ))}
           </CardBody>
         </Card>
       </div>
